@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>أسماء الله الحسنى | حصنك اليومي</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="azkar-page">
+        <a href="../index.html" class="back-home">
+            <i class="fa-solid fa-arrow-right"></i>
+            الرئيسية
+        </a>
+        
+        <div class="page-header">
+            <h1><i class="fa-solid fa-crown"></i> أسماء الله الحسنى</h1>
+            <div class="subhead">الأسماء الحسنى لله تعالى</div>
+        </div>
+
+        <div id="azkarContainer"></div>
+        
+        <div class="footer-note">
+            <i class="fa-regular fa-heart"></i>
+            لله تسعة وتسعون اسماً مئة إلا واحداً لا يحصيها إلا هو
+        </div>
+    </div>
+    
+    <div id="toastMsg" class="toast-msg"></div>
+
+    <script src="shared.js"></script>
+    
+    <script>
+    (function() {
+        'use strict';
+        
+        const pageSlug = 'allah-names';
+        const pageCategory = 'أسماء الله الحسنى';
+        const STORAGE_KEY = 'allah-names_counts';
+        
+        const azkarData = [
+            {
+                text: "اللَّه",
+                note: "الذات الإلهية - اسم الذات",
+                maxCount: 1
+            },
+            {
+                text: "الرَّحْمَنُ",
+                note: "ذو الرحمة العامة",
+                maxCount: 1
+            },
+            {
+                text: "الرَّحِيمُ",
+                note: "المتصل بالرحمة في كل وقت",
+                maxCount: 1
+            },
+            {
+                text: "الْمَلِكُ",
+                note: "المالك الحقيقي",
+                maxCount: 1
+            },
+            {
+                text: "الْقُدُّوسُ",
+                note: "المتنزه عن النقائص",
+                maxCount: 1
+            },
+            {
+                text: "السَّلَامُ",
+                note: "المسلم من كل آفة",
+                maxCount: 1
+            },
+            {
+                text: "الْمُؤْمِنُ",
+                note: "المؤمن من كل مكرمة",
+                maxCount: 1
+            },
+            {
+                text: "الْمُهَيْمِنُ",
+                note: "الحافظ لكل شيء",
+                maxCount: 1
+            },
+            {
+                text: "الْعَزِيزُ",
+                note: "ذو العز والعظمة",
+                maxCount: 1
+            },
+            {
+                text: "الْجَبَّارُ",
+                note: "المتصرف في ملكه",
+                maxCount: 1
+            },
+            {
+                text: "الْمُتَكَبِّرُ",
+                note: "المت自尊 بذاته",
+                maxCount: 1
+            },
+            {
+                text: "الْخَالِقُ",
+                note: "المبدع لغيره",
+                maxCount: 1
+            },
+            {
+                text: "الْبَارِئُ",
+                note: "المصور لكل شيء",
+                maxCount: 1
+            },
+            {
+                text: "الْمُصَوِّرُ",
+                note: "المعطي الشكل للصور",
+                maxCount: 1
+            },
+            {
+                text: "الْغَفَّارُ",
+                note: "كثير المغفرة",
+                maxCount: 1
+            },
+            {
+                text: "الْقَهَّارُ",
+                note: "الغالب على أمره",
+                maxCount: 1
+            },
+            {
+                text: "الْوَهَّابُ",
+                note: "العطية التي لا تُعادل",
+                maxCount: 1
+            },
+            {
+                text: "الرَّزَّاقُ",
+                note: "المتولي الإنعام",
+                maxCount: 1
+            },
+            {
+                text: "الْفَتَّاحُ",
+                note: "الحكم بالعدل",
+                maxCount: 1
+            },
+            {
+                text: "الْعَلِيمُ",
+                note: "العالم بكل شيء",
+                maxCount: 1
+            }
+        ];
+
+        counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+
+        function render() {
+            if (!container) return;
+            container.innerHTML = azkarData.map((item, idx) => {
+                return AzkarApp.renderCard(item, idx, pageSlug);
+            }).join('');
+            AzkarApp.bindAzkarEvents(azkarData, pageSlug, pageCategory, incrementCount, resetCount);
+        }
+
+        function incrementCount(index) {
+            AzkarApp.incrementCount(index, azkarData, STORAGE_KEY, render);
+        }
+
+        function resetCount(index) {
+            AzkarApp.resetCount(index, STORAGE_KEY, render);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (counts.length !== azkarData.length) {
+                counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+            }
+            render();
+        });
+    })();
+    </script>
+</body>
+</html>

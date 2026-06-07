@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>الأدعية القرآنية | حصنك اليومي</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="azkar-page">
+        <a href="../index.html" class="back-home">
+            <i class="fa-solid fa-arrow-right"></i>
+            الرئيسية
+        </a>
+        
+        <div class="page-header">
+            <h1><i class="fa-solid fa-book-open"></i> الأدعية القرآنية</h1>
+            <div class="subhead">أدعية من كتاب الله العزيز</div>
+        </div>
+
+        <div id="azkarContainer"></div>
+        
+        <div class="footer-note">
+            <i class="fa-regular fa-heart"></i>
+            اللهم اجعل القرآن ربيع قلوبنا
+        </div>
+    </div>
+    
+    <div id="toastMsg" class="toast-msg"></div>
+
+    <script src="shared.js"></script>
+    
+    <script>
+    (function() {
+        'use strict';
+        
+        const pageSlug = 'quranic-dua';
+        const pageCategory = 'الأدعية القرآنية';
+        const STORAGE_KEY = 'quranic-dua_counts';
+        
+        const azkarData = [
+            {
+                text: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+                note: "سورة البقرة - آية 201",
+                maxCount: 1
+            },
+            {
+                text: "رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِن لَّدُنكَ رَحْمَةً إِنَّكَ أَنتَ الْوَهَّابُ",
+                note: "سورة آل عمران - آية 8",
+                maxCount: 1
+            },
+            {
+                text: "رَبَّنَا إِنَّنَا آمَنَّا فَاغْفِرْ لَنَا ذُنُوبَنَا وَقِنَا عَذَابَ النَّارِ",
+                note: "سورة آل عمران - آية 16",
+                maxCount: 1
+            },
+            {
+                text: "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي وَاحْلُلْ عُقْدَةً مِّن لِّسَانِي يَفْقَهُوا قَوْلِي",
+                note: "سورة طه - آية 25-28",
+                maxCount: 1
+            },
+            {
+                text: "رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَثَبِّتْ أَقْدَامَنَا وَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ",
+                note: "سورة البقرة - آية 250",
+                maxCount: 1
+            },
+            {
+                text: "رَبَّنَا لَا تَجْعَلْنَا فِتْنَةً لِّلْقَوْمِ الظَّالِمِينَ وَنَجِّنَا بِرَحْمَتِكَ مِنَ الْقَوْمِ الْكَافِرِينَ",
+                note: "سورة يونس - آية 85-86",
+                maxCount: 1
+            },
+            {
+                text: "رَبِّ أَوْزِعْنِي أَنْ أَشْكُرَ نِعْمَتَكَ الَّتِي أَنْعَمْتَ عَلَيَّ وَعَلَىٰ وَالِدَيَّ وَأَنْ أَعْمَلَ صَالِحًا تَرْضَاهُ وَأَدْخِلْنِي بِرَحْمَتِكَ فِي عِبَادِكَ الصَّالِحِينَ",
+                note: "سورة النمل - آية 19",
+                maxCount: 1
+            },
+            {
+                text: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا",
+                note: "سورة الفرقان - آية 74",
+                maxCount: 1
+            },
+            {
+                text: "رَبَّنَا اغْفِرْ لَنَا ذُنُوبَنَا وَإِسْرَافَنَا فِي أَمْرِنَا وَثَبِّتْ أَقْدَامَنَا وَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ",
+                note: "سورة آل عمران - آية 147",
+                maxCount: 1
+            },
+            {
+                text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى",
+                note: "من الأدعية القرآنية",
+                maxCount: 1
+            }
+        ];
+
+        counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+
+        function render() {
+            if (!container) return;
+            container.innerHTML = azkarData.map((item, idx) => {
+                return AzkarApp.renderCard(item, idx, pageSlug);
+            }).join('');
+            AzkarApp.bindAzkarEvents(azkarData, pageSlug, pageCategory, incrementCount, resetCount);
+        }
+
+        function incrementCount(index) {
+            AzkarApp.incrementCount(index, azkarData, STORAGE_KEY, render);
+        }
+
+        function resetCount(index) {
+            AzkarApp.resetCount(index, STORAGE_KEY, render);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (counts.length !== azkarData.length) {
+                counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+            }
+            render();
+        });
+    })();
+    </script>
+</body>
+</html>

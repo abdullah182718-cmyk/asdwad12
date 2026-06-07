@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>أذكار الوضوء | حصنك اليومي</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="azkar-page">
+        <a href="../index.html" class="back-home">
+            <i class="fa-solid fa-arrow-right"></i>
+            الرئيسية
+        </a>
+        
+        <div class="page-header">
+            <h1><i class="fa-solid fa-droplet"></i> أذكار الوضوء</h1>
+            <div class="subhead">ما يقال عند الوضوء</div>
+        </div>
+
+        <div id="azkarContainer"></div>
+        
+        <div class="footer-note">
+            <i class="fa-regular fa-heart"></i>
+            اللهم طهر قلبي من النفاق وعملي من الرياء
+        </div>
+    </div>
+    
+    <div id="toastMsg" class="toast-msg"></div>
+
+    <script src="shared.js"></script>
+    
+    <script>
+    (function() {
+        'use strict';
+        
+        const pageSlug = 'wudu';
+        const pageCategory = 'أذكار الوضوء';
+        const STORAGE_KEY = 'wudu_counts';
+        
+        const azkarData = [
+            {
+                text: "بِسْمِ اللَّهِ",
+                note: "عند البدء بالوضوء",
+                maxCount: 1
+            },
+            {
+                text: "أَشْهَدُ أَن لَّا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+                note: "بعد الفراغ من الوضوء",
+                maxCount: 1
+            },
+            {
+                text: "اللَّهُمَّ اغْفِرْ لِي ذَنْبِي وَوَسِّعْ لِي فِي دَارِي وَبَارِكْ لِي فِي رِزْقِي",
+                note: "من دعاء النبي ﷺ بعد الوضوء",
+                maxCount: 1
+            },
+            {
+                text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعُذْرَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ",
+                note: "ذكر مبارك",
+                maxCount: 1
+            },
+            {
+                text: "اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ",
+                note: "من الأدعية النبوية",
+                maxCount: 1
+            },
+            {
+                text: "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ أَشْهَدُ أَن لَّا إِلَٰهَ إِلَّا أَنْتَ أَسْتَغْفِرُكَ وَأَتُوبُ إِلَيْكَ",
+                note: "من أذكار الوضوء",
+                maxCount: 1
+            },
+            {
+                text: "اللَّهُمَّ طَهِّرْ قَلْبِي مِنَ النِّفَاقِ وَعَمَلِي مِنَ الرِّيَاءِ",
+                note: "ذكر طيب",
+                maxCount: 1
+            },
+            {
+                text: "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+                note: "من دعاء النبي ﷺ",
+                maxCount: 1
+            },
+            {
+                text: "لَا إِلَهَ إِلَّا اللَّهُ",
+                note: "ذكر مبارك",
+                maxCount: 100
+            },
+            {
+                text: "سُبْحَانَ اللَّهِ",
+                note: "من الأذكار المفضلة",
+                maxCount: 100
+            }
+        ];
+
+        counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+
+        function render() {
+            if (!container) return;
+            container.innerHTML = azkarData.map((item, idx) => {
+                return AzkarApp.renderCard(item, idx, pageSlug);
+            }).join('');
+            AzkarApp.bindAzkarEvents(azkarData, pageSlug, pageCategory, incrementCount, resetCount);
+        }
+
+        function incrementCount(index) {
+            AzkarApp.incrementCount(index, azkarData, STORAGE_KEY, render);
+        }
+
+        function resetCount(index) {
+            AzkarApp.resetCount(index, STORAGE_KEY, render);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (counts.length !== azkarData.length) {
+                counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+            }
+            render();
+        });
+    })();
+    </script>
+</body>
+</html>

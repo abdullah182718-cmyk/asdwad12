@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>فضل الذكر | حصنك اليومي</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="azkar-page">
+        <a href="../index.html" class="back-home">
+            <i class="fa-solid fa-arrow-right"></i>
+            الرئيسية
+        </a>
+        
+        <div class="page-header">
+            <h1><i class="fa-solid fa-gem"></i> فضل الذكر</h1>
+            <div class="subhead">أحاديث في فضل ذكر الله</div>
+        </div>
+
+        <div id="azkarContainer"></div>
+        
+        <div class="footer-note">
+            <i class="fa-regular fa-heart"></i>
+            أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
+        </div>
+    </div>
+    
+    <div id="toastMsg" class="toast-msg"></div>
+
+    <script src="shared.js"></script>
+    
+    <script>
+    (function() {
+        'use strict';
+        
+        const pageSlug = 'dhikr-virtue';
+        const pageCategory = 'فضل الذكر';
+        const STORAGE_KEY = 'dhikr-virtue_counts';
+        
+        const azkarData = [
+            {
+                text: "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
+                note: "سورة الرعد - آية 28",
+                maxCount: 1
+            },
+            {
+                text: "وَالذَّاكِرِينَ اللَّهَ كَثِيرًا وَالذَّاكِرَاتِ",
+                note: "سورة الأحزاب - آية 35",
+                maxCount: 1
+            },
+            {
+                text: "يَا أَيُّهَا الَّذِينَ آمَنُوا اذْكُرُوا اللَّهَ ذِكْرًا كَثِيرًا",
+                note: "سورة الأحزاب - آية 41",
+                maxCount: 1
+            },
+            {
+                text: "مَنْ أَحَبَّ أَنْ يَكُونَ أَقْوَى لِلنَّاسِ فَلْيَذْكُرِ اللَّهَ",
+                note: "حديث نبوي شريف",
+                maxCount: 1
+            },
+            {
+                text: "الذِّكْرُ هُوَ الْمُلْكُ لَا يَغْفِلُ عَنْهُ إِلَّا هَالِكٌ",
+                note: "من أذكار النبي ﷺ",
+                maxCount: 1
+            },
+            {
+                text: "إِنَّ لِلَّهِ أُمَّةً يَجْتَمِعُونَ فِي ذِكْرِ اللَّهِ يَفْزَعُونَ إِلَيْهِ",
+                note: "من فضائل الذكر",
+                maxCount: 1
+            },
+            {
+                text: "الذَّاكِرُونَ لِلَّهِ كُلَّ وَقْتٍ أَحَقُّ مَنْ يَنَالُ الشَّفَاعَةَ",
+                note: "من أحاديث فضل الذكر",
+                maxCount: 1
+            },
+            {
+                text: "مَا جَلَسَ قَوْمٌ يَذْكُرُونَ اللَّهَ إِلَّا حَفَّتْهُمُ الْمَلَائِكَةُ وَغَشِيَتْهُمُ الرَّحْمَةُ",
+                note: "حديث نبوي في فضل الملاكمة",
+                maxCount: 1
+            },
+            {
+                text: "أَفْضَلُ الْعِبَادَةِ ذِكْرُ اللَّهِ",
+                note: "من أذكار النبي ﷺ",
+                maxCount: 1
+            },
+            {
+                text: "لَوْ أَنَّ قَوْمًا يَذْكُرُونَ اللَّهَ حَتَّى تَضِيقَ بِهِمْ صُدُورُهُمْ لَمَا مَاتُوا فِي ضِيقٍ",
+                note: "من أحاديث الفضل",
+                maxCount: 1
+            }
+        ];
+
+        counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+
+        function render() {
+            if (!container) return;
+            container.innerHTML = azkarData.map((item, idx) => {
+                return AzkarApp.renderCard(item, idx, pageSlug);
+            }).join('');
+            AzkarApp.bindAzkarEvents(azkarData, pageSlug, pageCategory, incrementCount, resetCount);
+        }
+
+        function incrementCount(index) {
+            AzkarApp.incrementCount(index, azkarData, STORAGE_KEY, render);
+        }
+
+        function resetCount(index) {
+            AzkarApp.resetCount(index, STORAGE_KEY, render);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (counts.length !== azkarData.length) {
+                counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+            }
+            render();
+        });
+    })();
+    </script>
+</body>
+</html>

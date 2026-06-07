@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>أذكار متفرقة | حصنك اليومي</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="azkar-page">
+        <a href="../index.html" class="back-home">
+            <i class="fa-solid fa-arrow-right"></i>
+            الرئيسية
+        </a>
+        
+        <div class="page-header">
+            <h1><i class="fa-solid fa-table-cells"></i> أذكار متفرقة</h1>
+            <div class="subhead">أذكار لمناسبات متعددة</div>
+        </div>
+
+        <div id="azkarContainer"></div>
+        
+        <div class="footer-note">
+            <i class="fa-regular fa-heart"></i>
+            اللهم اجعلنا من الذاكرين الله كثيراً
+        </div>
+    </div>
+    
+    <div id="toastMsg" class="toast-msg"></div>
+
+    <script src="shared.js"></script>
+    
+    <script>
+    (function() {
+        'use strict';
+        
+        const pageSlug = 'misc';
+        const pageCategory = 'أذكار متفرقة';
+        const STORAGE_KEY = 'misc_counts';
+        
+        const azkarData = [
+            {
+                text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْبَرَصِ وَالْجُنُونِ وَالْجُذَامِ وَسَيِّئِ الْأَسْقَامِ",
+                note: "من دعاء النبي ﷺ",
+                maxCount: 1
+            },
+            {
+                text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ مُنْقِصَاءِ الرِّزْقِ وَدَرْكِ الشَّمْسِ وَعَذَابِ النَّارِ",
+                note: "ذكر مبارك",
+                maxCount: 1
+            },
+            {
+                text: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ وَالْعَجْزِ وَالْكَسَلِ وَالْجُبْنِ وَالْبُخْلِ وَغَلَبَةِ الدَّيْنِ وَقَهْرِ الرِّجَالِ",
+                note: "من أدعية النبي ﷺ",
+                maxCount: 1
+            },
+            {
+                text: "اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى نَبِيِّنَا مُحَمَّد",
+                note: "من أحب الكلام إلى الله",
+                maxCount: 10
+            },
+            {
+                text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ",
+                note: "من دعاء النبي ﷺ",
+                maxCount: 1
+            },
+            {
+                text: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى",
+                note: "ذكر طيب",
+                maxCount: 1
+            },
+            {
+                text: "اللَّهُمَّ إِنِّي أَسْتَغْفِرُكَ لِمَنِ اسْتَغْفَرَكَ وَأَسْتَغْفِرُكَ لِمَنْ لَمْ يَسْتَغْفِرْكَ",
+                note: "ذكر مبارك",
+                maxCount: 1
+            },
+            {
+                text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرِ",
+                note: "من أذكار الصباح والمساء",
+                maxCount: 100
+            },
+            {
+                text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+                note: "حطت خطاياه وإن كانت مثل زبد البحر",
+                maxCount: 100
+            },
+            {
+                text: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+                note: "من الذاكرين الله كثيراً",
+                maxCount: 100
+            }
+        ];
+
+        counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+
+        function render() {
+            if (!container) return;
+            container.innerHTML = azkarData.map((item, idx) => {
+                return AzkarApp.renderCard(item, idx, pageSlug);
+            }).join('');
+            AzkarApp.bindAzkarEvents(azkarData, pageSlug, pageCategory, incrementCount, resetCount);
+        }
+
+        function incrementCount(index) {
+            AzkarApp.incrementCount(index, azkarData, STORAGE_KEY, render);
+        }
+
+        function resetCount(index) {
+            AzkarApp.resetCount(index, STORAGE_KEY, render);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (counts.length !== azkarData.length) {
+                counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+            }
+            render();
+        });
+    })();
+    </script>
+</body>
+</html>
