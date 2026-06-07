@@ -11,22 +11,22 @@
 </head>
 <body>
     <!-- الهيدر -->
-    <header class="main-header">
-        <button class="icon-btn" id="searchToggleBtn" aria-label="البحث">
+    <header class="header">
+        <button class="header-btn" id="searchToggleBtn" aria-label="البحث">
             <i class="fa-solid fa-magnifying-glass"></i>
         </button>
-        <div class="logo">
+        <div class="header-logo">
             <i class="fa-solid fa-book-open"></i>
-            <h1>أذكاري</h1>
+            <span>أذكاري</span>
         </div>
-        <button class="icon-btn" id="menuToggleBtn" aria-label="القائمة">
+        <button class="header-btn" id="menuToggleBtn" aria-label="القائمة">
             <i class="fa-solid fa-bars"></i>
         </button>
     </header>
 
     <!-- القائمة الجانبية -->
     <div class="sidebar" id="sidebar">
-        <button class="close-btn" id="closeMenuBtn" aria-label="إغلاق">
+        <button class="sidebar-close" id="closeMenuBtn" aria-label="إغلاق">
             <i class="fa-solid fa-xmark"></i>
         </button>
         <nav class="sidebar-nav">
@@ -51,26 +51,26 @@
                 <input type="text" id="searchInput" placeholder="ابحث في الأذكار والتصنيفات...">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
             </div>
-            <div id="searchResults" class="categories-grid"></div>
+            <div id="searchResults" class="categories"></div>
         </section>
 
         <!-- المحتوى الرئيسي -->
         <div id="homeContent">
-            <section class="hero-section">
-                <div class="hero-icon-wrapper">
+            <section class="hero">
+                <div class="hero-icon">
                     <i class="fa-solid fa-book-open-reader"></i>
                 </div>
-                <h2 class="quran-verse">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</h2>
-                <p class="hero-subtitle">حصنك اليومي وملاذك الروحي. استكشف الأذكار والأدعية التي تنير يومك وتحفظك.</p>
+                <h2 class="hero-title">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</h2>
+                <p class="hero-desc">حصنك اليومي وملاذك الروحي. استكشف الأذكار والأدعية التي تنير يومك وتحفظك.</p>
             </section>
 
             <h3 class="section-title">التصنيفات</h3>
-            <section class="categories-grid" id="categoriesGrid"></section>
+            <section class="categories" id="categoriesGrid"></section>
         </div>
     </main>
 
     <!-- الفوتر -->
-    <footer class="footer-bar">
+    <footer class="footer">
         <p>سبحان الله وبحمده، سبحان الله العظيم</p>
     </footer>
 
