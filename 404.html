@@ -37,14 +37,21 @@
   (function fixLinks() {
     const currentPath = window.location.pathname;
     let basePath = '';
+    let suggestionsBase = '';
 
     // تحديد المسار الأساسي للوصول للمجلد الرئيسي بناءً على مكان الصفحة الحالية
     if (currentPath.includes('/posts/')) {
       basePath = '../../';
+      suggestionsBase = '../../posts/';
+    } else if (currentPath.includes('/pages/')) {
+      basePath = '../../';
+      suggestionsBase = '../../posts/';
     } else if (currentPath.split('/').length > 3) {
       basePath = '../';
+      suggestionsBase = '../posts/';
     } else {
       basePath = '';
+      suggestionsBase = 'posts/';
     }
 
     // 1. تحديث زر الرئيسية
@@ -53,19 +60,12 @@
       homeBtn.setAttribute('href', basePath + 'index.html');
     }
 
-    // 2. تحديث روابط الاقتراحات لتأخذ المسار الصحيح تلقائياً دون تدمير اسم الصفحة
+    // 2. تحديث روابط الاقتراحات
     document.querySelectorAll('.suggestions-links a').forEach(link => {
       const originalHref = link.getAttribute('href');
-      // تنظيف الرابط من أي مسارات سابقة وتعديله بناءً على مكان الصفحة الحالية
-      const pageName = originalHref.replace(/^(\.\.\/|\.\/)/, ''); 
+      const pageName = originalHref.replace(/^(\.\.\/|\.\/)/, '');
       
-      // إذا كنا داخل مجلد posts، والروابط المعروضة هي posts/sabah.html مثلاً
-      // فنحن بحاجة لطلب الخروج أولاً ثم الدخول للمجلد الصحيح
-      if (currentPath.includes('/posts/') && pageName.startsWith('posts/')) {
-        link.setAttribute('href', pageName.replace('posts/', ''));
-      } else {
-        link.setAttribute('href', basePath + pageName);
-      }
+      link.setAttribute('href', suggestionsBase + pageName);
     });
   })();
 </script>
