@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أذكاري - حصنك اليومي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+</head>
+<body>
+    <!-- الهيدر -->
+    <header class="main-header">
+        <button class="icon-btn" id="searchToggleBtn" aria-label="البحث">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <div class="logo">
+            <i class="fa-solid fa-book-open"></i>
+            <h1>أذكاري</h1>
+        </div>
+        <button class="icon-btn" id="menuToggleBtn" aria-label="القائمة">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </header>
+
+    <!-- القائمة الجانبية -->
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" id="closeMenuBtn" aria-label="إغلاق">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <nav class="sidebar-nav">
+            <a href="#" class="active">
+                <i class="fa-solid fa-house"></i>
+                الرئيسية
+            </a>
+            <a href="favorites.html">
+                <i class="fa-solid fa-heart"></i>
+                المفضلة
+            </a>
+        </nav>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="container">
+        <!-- واجهة البحث -->
+        <section id="searchSection" class="search-section hidden">
+            <h2 class="section-title">البحث</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="ابحث في الأذكار والتصنيفات...">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </div>
+            <div id="searchResults" class="categories-grid"></div>
+        </section>
+
+        <!-- المحتوى الرئيسي -->
+        <div id="homeContent">
+            <section class="hero-section">
+                <div class="hero-icon-wrapper">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                </div>
+                <h2 class="quran-verse">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</h2>
+                <p class="hero-subtitle">حصنك اليومي وملاذك الروحي. استكشف الأذكار والأدعية التي تنير يومك وتحفظك.</p>
+            </section>
+
+            <h3 class="section-title">التصنيفات</h3>
+            <section class="categories-grid" id="categoriesGrid"></section>
+        </div>
+    </main>
+
+    <!-- الفوتر -->
+    <footer class="footer-bar">
+        <p>سبحان الله وبحمده، سبحان الله العظيم</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

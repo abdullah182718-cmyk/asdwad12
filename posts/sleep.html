@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>أذكار النوم | حصنك اليومي</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="azkar-page">
+        <a href="../index.html" class="back-home">
+            <i class="fa-solid fa-arrow-right"></i>
+            الرئيسية
+        </a>
+        
+        <div class="page-header">
+            <h1><i class="fa-solid fa-moon"></i> أذكار النوم</h1>
+            <div class="subhead">أذكار تقال عند النوم</div>
+        </div>
+
+        <div id="azkarContainer"></div>
+        
+        <div class="footer-note">
+            <i class="fa-regular fa-heart"></i>
+            اللهم اجعلنا من الذاكرين الله كثيراً والذاكرات
+        </div>
+    </div>
+    
+    <div id="toastMsg" class="toast-msg"></div>
+
+    <script src="shared.js"></script>
+    <script>
+    (function() {
+        'use strict';
+        
+        const pageSlug = 'sleep';
+        const pageCategory = 'أذكار النوم';
+        const STORAGE_KEY = 'sleep_counts';
+        
+        const azkarData = [
+            { text: "بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، فَإِنْ أَمْسَكْتَ نَفْسِي فَارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ", note: "ذكر عند النوم", maxCount: 1 },
+            { text: "اللَّهُمَّ إِنَّكَ خَلَقْتَ نَفْسِي وَأَنْتَ تَوَفَّاهَا، لَكَ مَمَاتُهَا وَمَحْيَاهَا، إِنْ أَحْيَيْتَهَا فَاحْفَظْهَا، وَإِنْ أَمَتَّهَا فَاغْفِرْ لَهَا", note: "ذكر عند النوم", maxCount: 1 },
+            { text: "اللَّهُمَّ بِاسْمِكَ أَمُوتُ وَأَحْيَا", note: "ذكر عند النوم", maxCount: 1 },
+            { text: "سُبْحَانَ اللَّهِ (33)، الْحَمْدُ لِلَّهِ (33)، اللَّهُ أَكْبَرُ (34)", note: "تُقال عند النوم", maxCount: 1 },
+            { text: "اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ", note: "ذكر عند النوم", maxCount: 1 },
+            { title: "النفث في الكفين", text: "يجمع كفيه ثم ينفث فيهما ويقرأ: قل هو الله أحد، وقل أعوذ برب الفلق، وقل أعوذ برب الناس، ثم يمسح بهما ما استطاع من جسده", note: "ثلاث مرات", maxCount: 3 },
+            { title: "خواتيم سورة البقرة", text: "آمَنَ الرَّسُولُ بِمَا أُنْزِلَ إِلَيْهِ مِنْ رَبِّهِ وَالْمُؤْمِنُونَ... الآية الأخيرة من سورة البقرة", note: "من قرأهما في ليلة كفتاه", maxCount: 1 },
+            { title: "آية الكرسي", text: "اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ وَلَا يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ", note: "لن يزال عليك من الله حافظ ولا يقربك شيطان حتى تصبح", maxCount: 1 },
+            { title: "عند القلق والأرق", text: "اللَّهُمَّ رَبَّ السَّمَوَاتِ السَّبْعِ وَمَا أَظَلَّتْ، وَرَبَّ الْأَرَضِينَ وَمَا أَقَلَّتْ، وَرَبَّ الشَّيَاطِينِ وَمَا أَضَلَّتْ، كُنْ لِي جَارًا مِنْ خَلْقِكَ كُلِّهِمْ أَنْ يَفْرِطَ عَلَيَّ أَحَدٌ مِنْهُمْ أَوْ أَنْ يَبْغِي عَلَيَّ، عَزَّ جَارُّكَ وَجَلَّ ثَنَاؤُكَ وَلَا إِلَهَ غَيْرُكَ", note: "ذكر عند القلق", maxCount: 1 },
+            { title: "عند الفزع في النوم", text: "أَعُوذُ بِكَلِمَاتِ اللهِ التَّامَّةِ مِنْ غَضَبِهِ وَشَرِّ عِبَادِهِ، وَمِنْ هَمَزَاتِ الشَّيَاطِينِ وَأَنْ يَحْضُرُونِ", note: "ذكر عند الفزع", maxCount: 1 }
+        ];
+
+        counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+
+        function render() {
+            if (!container) return;
+            container.innerHTML = azkarData.map((item, idx) => AzkarApp.renderCard(item, idx, pageSlug)).join('');
+            AzkarApp.bindAzkarEvents(azkarData, pageSlug, pageCategory, incrementCount, resetCount);
+        }
+
+        function incrementCount(index) {
+            AzkarApp.incrementCount(index, azkarData, STORAGE_KEY, render);
+        }
+
+        function resetCount(index) {
+            AzkarApp.resetCount(index, STORAGE_KEY, render);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (counts.length !== azkarData.length) {
+                counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+            }
+            render();
+        });
+    })();
+    </script>
+</body>
+</html>

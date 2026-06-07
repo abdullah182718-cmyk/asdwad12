@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>تسابيح | حصنك اليومي</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="azkar-page">
+        <a href="../index.html" class="back-home">
+            <i class="fa-solid fa-arrow-right"></i>
+            الرئيسية
+        </a>
+        
+        <div class="page-header">
+            <h1><i class="fa-solid fa-star"></i> تسابيح</h1>
+            <div class="subhead">أسبحان الله والحمد لله والله أكبر</div>
+        </div>
+
+        <div id="azkarContainer"></div>
+        
+        <div class="footer-note">
+            <i class="fa-regular fa-heart"></i>
+            اللهم تقبل منا صلاتنا وذِكرنا، واجعلنا من الذاكرينك كثيراً
+        </div>
+    </div>
+    
+    <div id="toastMsg" class="toast-msg"></div>
+
+    <script src="shared.js"></script>
+    <script>
+    (function() {
+        'use strict';
+        
+        const pageSlug = 'tasabih';
+        const pageCategory = 'تسابيح';
+        const STORAGE_KEY = 'tasabih_counts';
+        
+        const azkarData = [
+            { text: "سُبْحَانَ اللَّهِ", note: "يكتب له ألف حسنة أو يحط عنه ألف خطيئة", maxCount: 100 },
+            { text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", note: "حُطَّتْ خَطَايَاهُ وَإِنْ كَانَتْ مِثْلَ زَبَدِ الْبَحْرِ", maxCount: 100 },
+            { text: "سُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ", note: "تملآن ما بين السماوات والأرض", maxCount: 100 },
+            { text: "سُبْحَانَ اللهِ العَظِيمِ وَبِحَمْدِهِ", note: "غرست له نخلة في الجنة", maxCount: 100 },
+            { text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ", note: "ثقيلتان في الميزان حبيبتان إلى الرحمن", maxCount: 100 },
+            { text: "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرِ", note: "كُتبت له مئة حسنة، ومُحيت عنه مئة سيئة", maxCount: 100 },
+            { text: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", note: "تملأ ميزان العبد بالحسنات", maxCount: 100 },
+            { text: "لَا حَوْلَ وَلا قُوَّةَ إِلَّا بِاللَّهِ", note: "كنز من كنوز الجنة", maxCount: 100 },
+            { text: "الْلَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى سَيِّدِنَا مُحَمَّد", note: "من صلى على النبي حين يصبح وحين يمسي أدركته شفاعتي", maxCount: 100 },
+            { text: "أَسْتَغْفِرُ اللهَ", note: "لفعل الرسول ﷺ والاقتداء به", maxCount: 100 },
+            { text: "سُبْحَانَ الْلَّهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا الْلَّهُ، وَالْلَّهُ أَكْبَرُ", note: "أحب الكلام إلى الله، والْبَاقِيَاتُ الْصَّالِحَات", maxCount: 100 },
+            { text: "لَا إِلَهَ إِلَّا اللَّهُ", note: "أفضل الذكر لا إله إلاّ الله", maxCount: 100 },
+            { text: "الْلَّهُ أَكْبَرُ", note: "كُتبت له عشرون حسنة وحطت عنه عشرون سيئة", maxCount: 100 }
+        ];
+
+        counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+
+        function render() {
+            if (!container) return;
+            container.innerHTML = azkarData.map((item, idx) => AzkarApp.renderCard(item, idx, pageSlug)).join('');
+            AzkarApp.bindAzkarEvents(azkarData, pageSlug, pageCategory, incrementCount, resetCount);
+        }
+
+        function incrementCount(index) {
+            AzkarApp.incrementCount(index, azkarData, STORAGE_KEY, render);
+        }
+
+        function resetCount(index) {
+            AzkarApp.resetCount(index, STORAGE_KEY, render);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (counts.length !== azkarData.length) {
+                counts = AzkarApp.loadCounts(STORAGE_KEY, azkarData.length);
+            }
+            render();
+        });
+    })();
+    </script>
+</body>
+</html>

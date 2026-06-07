@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>المفضلة | حصنك اليومي</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="posts/style.css">
+</head>
+<body>
+    <div class="azkar-page">
+        <a href="index.html" class="back-home">
+            <i class="fa-solid fa-arrow-right"></i>
+            الرئيسية
+        </a>
+
+        <h1 class="page-title">
+            <i class="fa-solid fa-heart"></i>
+            الأذكار المفضلة
+        </h1>
+
+        <div id="favoritesContainer"></div>
+    </div>
+
+    <div id="toastMsg" class="toast-msg"></div>
+
+    <script src="posts/shared.js"></script>
+    <script>
+    (function() {
+        'use strict';
+        
+        const FAVORITES_KEY = 'favorites';
+        const COUNTS_KEY = 'favorite_counts';
+        
+        const container = document.getElementById('favoritesContainer');
+        const toast = document.getElementById('toastMsg');
+        
+        // ============ تحميل البيانات ============
+        function loadFavorites() {
+            return JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+        }
+        
+        function saveFavorites(favorites) {
+            localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+        }
+        
+        function loadCounts() {
+            return JSON.parse(localStorage.getItem(COUNTS_KEY) || '{}');
+        }
+        
+        function saveCounts(counts) {
+            localStorage.setItem(COUNTS_KEY, JSON.stringify(counts));
+        }
+        
+        // ============ العمليات ============
+        function removeFromFavorites(id) {
+            let favorites = loadFavorites();
+            favorites = favorites.filter(item => item.id !== id);
+            saveFavorites(favorites);
+            
+            let counts = loadCounts();
+            delete counts[id];
+            saveCounts(counts);
+            
+            AzkarApp.showToast('🗑️ تم الحذف من المفضلة');
+            render();
+        }
+        
+        function incrementCount(id, maxCount) {
+            let counts = loadCounts();
+            let current = counts[id] || 0;
+            if (current < maxCount) {
+                counts[id] = current + 1;
+                saveCounts(counts);
+                render();
+            }
+        }
+        
+        function resetCount(id) {
+            let counts = loadCounts();
+            counts[id] = 0;
+            saveCounts(counts);
+            render();
+        }
+        
+        // ============ التصيير ============
+        function render() {
+            if (!container) return;
+            
+            const favorites = loadFavorites();
+            const counts = loadCounts();
+            
+            if (favorites.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-regular fa-folder-open"></i>
+                        لا توجد أذكار مفضلة حالياً
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = favorites.map(item => {
+                const current = counts[item.id] || 0;
+                let max = item.maxCount || 1;
+                
+                // تخمين الحد الأقصى
+                if (!item.maxCount) {
+                    if (item.text.includes('33')) max = 33;
+                    else if (item.text.includes('عشر')) max = 10;
+                    else if (item.text.includes('سبع')) max = 7;
+                    else if (item.text.includes('ثلاث')) max = 3;
+                    else max = 1;
+                }
+                
+                const completed = current >= max;
+                
+                const buttonContent = completed ? `
+                    <div class="count-circle" style="background: rgba(255, 255, 255, 0.4);">
+                        <span>${max}</span>
+                        <hr>
+                        <span>${max}</span>
+                    </div>
+                    <span class="btn-text">مكتمل</span>
+                ` : `
+                    <div class="count-circle">
+                        <span>${current}</span>
+                        <hr>
+                        <span>${max}</span>
+                    </div>
+                    <span class="btn-text">اضغط<br>هنا</span>
+                `;
+                
+                return `
+                    <div class="dhikr-card">
+                        <div class="dhikr-card-body">
+                            <div class="card-top-bar">
+                                <span class="category-badge">${item.category || 'المفضلة'}</span>
+                                <button class="remove-btn" data-id="${item.id}" title="حذف من المفضلة">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                            <div class="dhikr-text">${escapeHtml(item.text)}</div>
+                            ${item.title ? `<div class="dhikr-reference">— ${escapeHtml(item.title)} —</div>` : ''}
+                            ${item.note ? `<div class="dhikr-note">${escapeHtml(item.note)}</div>` : ''}
+                        </div>
+                        <div class="card-action-area">
+                            <div class="action-buttons-wrap">
+                                <button class="btn-count ${completed ? 'completed' : ''}" 
+                                        data-id="${item.id}" 
+                                        ${completed ? 'disabled' : ''}>
+                                    ${buttonContent}
+                                </button>
+                                <button class="reset-btn" data-reset-id="${item.id}" title="إعادة تعيين">
+                                    <i class="fa-solid fa-arrow-rotate-left"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            bindEvents();
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+        
+        function bindEvents() {
+            document.querySelectorAll('.btn-count').forEach(btn => {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    const id = btn.dataset.id;
+                    const favorites = loadFavorites();
+                    const item = favorites.find(f => f.id === id);
+                    if (item) {
+                        incrementCount(id, item.maxCount || 1);
+                    }
+                };
+            });
+            
+            document.querySelectorAll('.reset-btn').forEach(btn => {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    resetCount(btn.dataset.resetId);
+                };
+            });
+            
+            document.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    removeFromFavorites(btn.dataset.id);
+                };
+            });
+        }
+        
+        // ============ البدء ============
+        document.addEventListener('DOMContentLoaded', render);
+    })();
+    </script>
+</body>
+</html>

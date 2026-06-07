@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>الصفحة غير موجودة | حصنك اليومي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="error-page">
+<div class="error-container">
+  <div class="error-icon">
+    <i class="fa-regular fa-circle-question"></i>
+  </div>
+  <h1>عذراً! الصفحة غير موجودة</h1>
+  <div class="error-message">
+    يبدو أن الرابط الذي تحاول الوصول إليه غير صحيح أو تم نقله.<br>
+    قد يكون الرابط قديمًا أو أن هناك خطأ في الكتابة.
+  </div>
+  <a href="../index.html" class="home-btn">
+    <i class="fa-solid fa-house"></i> العودة إلى الرئيسية
+  </a>
+  <div class="suggestions">
+    <p><i class="fa-regular fa-lightbulb"></i> بدلاً من ذلك، يمكنك زيارة:</p>
+    <div class="suggestions-links">
+      <a href="posts/sabah.html"><i class="fa-solid fa-cloud-sun"></i> أذكار الصباح</a>
+      <a href="posts/masaa.html"><i class="fa-solid fa-cloud-moon"></i> أذكار المساء</a>
+      <a href="posts/after-prayer.html"><i class="fa-solid fa-hand-holding-heart"></i> أذكار بعد الصلاة</a>
+      <a href="posts/sleep.html"><i class="fa-solid fa-bed"></i> أذكار النوم</a>
+    </div>
+  </div>
+</div>
+
+<!-- سكربت بسيط لتغيير رابط الرجوع إذا كان المستخدم في مجلد فرعي -->
+<script>
+  (function fixLinks() {
+    const currentPath = window.location.pathname;
+    let basePath = '';
+
+    // تحديد المسار الأساسي للوصول للمجلد الرئيسي بناءً على مكان الصفحة الحالية
+    if (currentPath.includes('/posts/')) {
+      basePath = '../../';
+    } else if (currentPath.split('/').length > 3) {
+      basePath = '../';
+    } else {
+      basePath = '';
+    }
+
+    // 1. تحديث زر الرئيسية
+    const homeBtn = document.querySelector('.home-btn');
+    if (homeBtn) {
+      homeBtn.setAttribute('href', basePath + 'index.html');
+    }
+
+    // 2. تحديث روابط الاقتراحات لتأخذ المسار الصحيح تلقائياً دون تدمير اسم الصفحة
+    document.querySelectorAll('.suggestions-links a').forEach(link => {
+      const originalHref = link.getAttribute('href');
+      // تنظيف الرابط من أي مسارات سابقة وتعديله بناءً على مكان الصفحة الحالية
+      const pageName = originalHref.replace(/^(\.\.\/|\.\/)/, ''); 
+      
+      // إذا كنا داخل مجلد posts، والروابط المعروضة هي posts/sabah.html مثلاً
+      // فنحن بحاجة لطلب الخروج أولاً ثم الدخول للمجلد الصحيح
+      if (currentPath.includes('/posts/') && pageName.startsWith('posts/')) {
+        link.setAttribute('href', pageName.replace('posts/', ''));
+      } else {
+        link.setAttribute('href', basePath + pageName);
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
