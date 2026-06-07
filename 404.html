@@ -24,10 +24,10 @@
   <div class="suggestions">
     <p><i class="fa-regular fa-lightbulb"></i> بدلاً من ذلك، يمكنك زيارة:</p>
     <div class="suggestions-links">
-      <a href="posts/sabah.html"><i class="fa-solid fa-cloud-sun"></i> أذكار الصباح</a>
-      <a href="posts/masaa.html"><i class="fa-solid fa-cloud-moon"></i> أذكار المساء</a>
-      <a href="posts/after-prayer.html"><i class="fa-solid fa-hand-holding-heart"></i> أذكار بعد الصلاة</a>
-      <a href="posts/sleep.html"><i class="fa-solid fa-bed"></i> أذكار النوم</a>
+      <a href="#" data-page="sabah.html"><i class="fa-solid fa-cloud-sun"></i> أذكار الصباح</a>
+      <a href="#" data-page="masaa.html"><i class="fa-solid fa-cloud-moon"></i> أذكار المساء</a>
+      <a href="#" data-page="after-prayer.html"><i class="fa-solid fa-hand-holding-heart"></i> أذكار بعد الصلاة</a>
+      <a href="#" data-page="sleep.html"><i class="fa-solid fa-bed"></i> أذكار النوم</a>
     </div>
   </div>
 </div>
@@ -37,35 +37,29 @@
   (function fixLinks() {
     const currentPath = window.location.pathname;
     let basePath = '';
-    let suggestionsBase = '';
-
-    // تحديد المسار الأساسي للوصول للمجلد الرئيسي بناءً على مكان الصفحة الحالية
-    if (currentPath.includes('/posts/')) {
-      basePath = '../../';
-      suggestionsBase = '../../posts/';
-    } else if (currentPath.includes('/pages/')) {
-      basePath = '../../';
-      suggestionsBase = '../../posts/';
-    } else if (currentPath.split('/').length > 3) {
-      basePath = '../';
-      suggestionsBase = '../posts/';
-    } else {
-      basePath = '';
-      suggestionsBase = 'posts/';
+    
+    // حساب المسار النسبي للعودة للمجلد الرئيسي
+    const pathParts = currentPath.split('/').filter(p => p);
+    let depth = 0;
+    
+    for (let i = 0; i < pathParts.length; i++) {
+      if (pathParts[i] === 'posts' || pathParts[i] === 'pages') {
+        depth = i;
+        break;
+      }
     }
-
-    // 1. تحديث زر الرئيسية
+    
+    basePath = depth > 0 ? '../'.repeat(depth) : '';
+    
+    // تحديث زر الرئيسية
     const homeBtn = document.querySelector('.home-btn');
     if (homeBtn) {
       homeBtn.setAttribute('href', basePath + 'index.html');
     }
 
-    // 2. تحديث روابط الاقتراحات
+    // تحديث روابط الاقتراحات
     document.querySelectorAll('.suggestions-links a').forEach(link => {
-      const originalHref = link.getAttribute('href');
-      const pageName = originalHref.replace(/^(\.\.\/|\.\/)/, '');
-      
-      link.setAttribute('href', suggestionsBase + pageName);
+      link.setAttribute('href', basePath + 'posts/' + link.getAttribute('data-page'));
     });
   })();
 </script>
