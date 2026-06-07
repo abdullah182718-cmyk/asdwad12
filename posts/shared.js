@@ -214,7 +214,14 @@ function bindAzkarEvents(dataArray, pageSlug, pageCategory, incrementCallback, r
             e.stopPropagation();
             const idx = parseInt(icon.dataset.idx);
             if (!isNaN(idx)) {
-                toggleFavorite(idx, dataArray[idx], pageSlug, pageCategory, updateHeartIcon);
+                // تحديث الأيقونة فوراً قبل العملية
+                const isFav = AzkarApp.isFavorite(`${pageSlug}_${idx}`);
+                icon.classList.toggle('active', !isFav);
+                icon.classList.toggle('fa-regular', isFav);
+                icon.classList.toggle('fa-solid', !isFav);
+                
+                // تنفيذ العملية
+                toggleFavorite(idx, dataArray[idx], pageSlug, pageCategory);
             }
         };
     });
